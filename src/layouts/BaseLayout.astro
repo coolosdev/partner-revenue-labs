@@ -41,10 +41,10 @@ const {
           </div>
         </a>
         <nav class="nav">
-          <a href="/services">Services</a>
-          <a href="/#tech">Reporting <span class="nav-badge">Sample</span></a>
-          <a href="/blog">Insights</a>
-          <a href="/#calculator">Planning Model</a>
+          <a href="/services">Capabilities</a>
+          <a href="/#tech">Telemetry <span class="nav-badge">Sample</span></a>
+          <a href="/blog">Playbooks</a>
+          <a href="/#calculator">MER Model</a>
           <a href="/about">About</a>
         </nav>
       </div>
@@ -88,27 +88,27 @@ const {
             <div class="dual-host-info">
               <div class="dual-host-avatar">PRL</div>
               <div>
-                <div class="dual-host-name">Partner Revenue Labs · Strategy Team</div>
-                <div class="dual-host-role">15 min · 1-on-1 discovery · Video Call</div>
+                <div class="dual-host-name">Partner Revenue Labs · Growth Architecture</div>
+                <div class="dual-host-role">15 min · Unit Economics &amp; Channel Fit · Video Call</div>
               </div>
             </div>
-            <span class="dual-host-pill">● Booking Open</span>
+            <span class="dual-host-pill">● Discovery Open</span>
           </div>
 
           <div class="dual-form-group">
-            <label class="dual-form-label">What would you like to explore?</label>
+            <label class="dual-form-label">Primary Growth Objective</label>
             <div class="dual-topic-grid">
               <label class="dual-topic dual-topic--active">
-                <input type="radio" name="call-topic" value="Affiliate Scale" checked />
-                <span>Affiliate Scale</span>
+                <input type="radio" name="call-topic" value="Affiliate & Creator Scale" checked />
+                <span>Creator &amp; Affiliate</span>
               </label>
               <label class="dual-topic">
-                <input type="radio" name="call-topic" value="Attribution & ROAS" />
-                <span>Attribution & ROAS</span>
+                <input type="radio" name="call-topic" value="MER & Attribution" />
+                <span>MER &amp; Attribution</span>
               </label>
               <label class="dual-topic">
-                <input type="radio" name="call-topic" value="Full Growth Packages" />
-                <span>Full Packages</span>
+                <input type="radio" name="call-topic" value="Omnichannel & Retail" />
+                <span>Omnichannel Retainers</span>
               </label>
             </div>
           </div>
@@ -181,17 +181,17 @@ const {
         <!-- TAB 2: 48-hour brand qualification audit -->
         <div id="modal-content-qual" class="dual-tab-panel hidden">
           <div class="dual-qual-intro">
-            <h4 class="dual-qual-title">Request 48-Hour Growth &amp; Bottleneck Audit</h4>
-            <p class="dual-qual-sub">We review your storefront, margins, attribution setup, and top 1–2 channel opportunities before recommending any spend.</p>
+            <h4 class="dual-qual-title">Request 48-Hour Funnel &amp; Incrementality Audit</h4>
+            <p class="dual-qual-sub">We benchmark your contribution margin, PDP conversion friction, CAPI signal quality, and top 1–2 acquisition levers before recommending spend.</p>
           </div>
 
           <form class="dual-form" id="qual-form">
             <div class="dual-form-field">
-              <label class="dual-form-label">Brand Monthly Revenue Range</label>
+              <label class="dual-form-label">Current Monthly Gross Revenue (GMV)</label>
               <select id="qual-rev" class="dual-input">
-                <option>$50k - $250k / month (Scaling)</option>
-                <option selected>$250k - $1M / month (Growth Leader)</option>
-                <option>$1M - $5M+ / month (Enterprise &amp; Retail)</option>
+                <option>Under $50k / month (Early Validation)</option>
+                <option selected>$50k - $250k / month (Emerging DTC / Retail)</option>
+                <option>$250k - $1M+ / month (Omnichannel Scale)</option>
               </select>
             </div>
 
@@ -207,22 +207,22 @@ const {
             </div>
 
             <div class="dual-form-field">
-              <label class="dual-form-label">Brand Store URL / Website</label>
+              <label class="dual-form-label">Storefront or Brand URL</label>
               <input type="text" id="qual-brand" required placeholder="https://yourbrand.com" autocomplete="url" />
             </div>
 
             <div class="dual-form-field">
-              <label class="dual-form-label">Primary Growth Bottleneck</label>
+              <label class="dual-form-label">Primary Acquisition Bottleneck</label>
               <select id="qual-bottleneck" class="dual-input">
-                <option selected>High CAC on Meta / Google Ads — need diversified affiliate reach</option>
-                <option>Existing affiliate program is stagnant / low-tier coupon sites only</option>
-                <option>Need influencer & creator sponsorship attribution tracking</option>
-                <option>Expanding from D2C into omnichannel &amp; brick-and-mortar retail</option>
+                <option selected>Rising paid social CAC — need incremental creator &amp; affiliate demand</option>
+                <option>Low PDP conversion rate or thin contribution margin blocking scale</option>
+                <option>Signal loss &amp; broken CAPI / multi-touch attribution</option>
+                <option>Brick-and-mortar retailer expanding into marketplaces &amp; live commerce</option>
               </select>
             </div>
 
             <button type="submit" id="qual-submit-btn" class="dual-btn dual-btn--sage">
-              <span>Generate Custom Growth Audit Dossier</span>
+              <span>Request 48-Hour Diagnostic Audit</span>
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </button>
           </form>
@@ -247,8 +247,8 @@ const {
       <div class="footer-inner">
         <p>&copy; {new Date().getFullYear()} Partner Revenue Labs. All rights reserved.</p>
         <div class="footer-links">
-          <a href="/services">Services</a>
-          <a href="/blog">Insights</a>
+          <a href="/services">Capabilities</a>
+          <a href="/blog">Playbooks</a>
           <a href="/about">About</a>
           <a href="/contact">Contact</a>
         </div>
