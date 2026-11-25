@@ -241,7 +241,7 @@ A: 1-2 days for Klaviyo flows, 1-3 days for Gorgias/Freshdesk depending on compl
 5. **Optimize monthly** – review data and adjust
 
 **Need help?**
-- Contact coolosdev26@proton.me for a 1-hour strategy session
+- [Request a 48-hour growth & bottleneck audit](/contact)
 - Join the weekly newsletter for Shopify AI ads and analytics tips
 
 ---

@@ -59,9 +59,9 @@ export async function onRequestPost(context) {
                 <div style="background: white; padding: 16px; border-radius: 12px; margin: 20px 0; border: 1px solid #EEE;">
                   <p style="margin: 0 0 6px 0;"><strong>Revenue Tier:</strong> ${escapeHtml(revenueTier || 'N/A')}</p>
                   <p style="margin: 0 0 6px 0;"><strong>Bottleneck:</strong> ${escapeHtml(bottleneck || 'N/A')}</p>
-                  <p style="margin: 0; color: #8CA388; font-weight: bold;">🔒 Status: Mutual NDA Active</p>
+                  <p style="margin: 0; color: #8CA388; font-weight: bold;">Status: Pending 48-Hour Manual Review</p>
                 </div>
-                <p style="color: #888; font-size: 12px;">Your bespoke revenue opportunity dossier will be delivered within 48 hours.</p>
+                <p style="color: #888; font-size: 12px;">We will send your channel &amp; bottleneck breakdown within 48 hours.</p>
               </div>
             `,
           }),

@@ -18,7 +18,8 @@ const Content = content ? content.Content : null;
 <BaseLayout
   title={post?.data.title ?? "Article"}
   description={post?.data.description ?? ""}
-  canonical={`https://partner-revenue-labs.pages.dev/${slug}`}
+  canonical={`https://partner-revenue-labs.pages.dev/blog/${slug}`}
+  ogImage={post?.data.heroImage}
 >
   <div class="container">
     {post ? (
@@ -64,9 +65,9 @@ const Content = content ? content.Content : null;
           </div>
 
           <div class="cta-box">
-            <h3>Enjoyed this guide?</h3>
-            <p>Get weekly AI ads and analytics tips delivered to your inbox.</p>
-            <a href="/contact" class="cta-primary">Subscribe Now</a>
+            <h3>Want a realistic look at your own stack?</h3>
+            <p>Request a free 48-hour growth and bottleneck audit for your store.</p>
+            <a href="/contact" class="cta-primary">Request 48h Audit</a>
           </div>
         </footer>
       </article>

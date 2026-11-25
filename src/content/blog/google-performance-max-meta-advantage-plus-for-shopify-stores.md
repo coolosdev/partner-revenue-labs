@@ -206,7 +206,7 @@ A: Yes. They complement each other, but you need to track each separately (Googl
 
 **Need help?**
 - Follow the setup guide at `/blog/hello-world` (already published)
-- Contact coolosdev26@proton.me for 1‑hour strategy session
+- [Request a 48-hour growth & bottleneck audit](/contact)
 
 **Resources & Templates**
 - Google Ads GP campaign template → `campaign-brief-gp.md`

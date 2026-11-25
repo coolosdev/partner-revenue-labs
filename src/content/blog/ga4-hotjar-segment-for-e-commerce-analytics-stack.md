@@ -245,7 +245,7 @@ A: GA4: 2-3 hours, Hotjar: 1-2 hours, Segment: 3-5 hours depending on number of 
 5. **Review monthly** – adjust based on funnel data, UX insights, customer profiles
 
 **Need help?**
-- Contact coolosdev26@proton.me for a 1-hour strategy session
+- [Request a 48-hour growth & bottleneck audit](/contact)
 - Join the weekly newsletter for Shopify AI ads and analytics tips
 
 ---

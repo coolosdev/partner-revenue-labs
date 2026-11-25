@@ -14,68 +14,68 @@ const canonical = "https://partner-revenue-labs.pages.dev/contact";
       <p class="intro">Tell us where you are today — a new brand, a growing store, or a retailer going online — and we'll map the fastest path to reach. No pressure, no jargon.</p>
 
       <div class="contact-layout">
-        <form class="contact-form" action="mailto:coolosdev26@proton.me" method="post" enctype="text/plain">
+        <form class="contact-form" id="contact-inquiry-form">
           <div class="field-row">
             <div class="field">
               <label for="name">Name</label>
               <input id="name" name="name" type="text" placeholder="Your name" required />
             </div>
             <div class="field">
-              <label for="email">Email</label>
+              <label for="email">Work Email</label>
               <input id="email" name="email" type="email" placeholder="you@company.com" required />
             </div>
           </div>
           <div class="field">
-            <label for="brand">Brand / Business</label>
-            <input id="brand" name="brand" type="text" placeholder="Your brand or store name" />
+            <label for="brand">Brand Website or Store URL</label>
+            <input id="brand" name="brand" type="text" placeholder="https://yourbrand.com" required />
           </div>
           <div class="field">
             <label for="type">Where are you today?</label>
             <select id="type" name="type">
-              <option>Up-and-coming brand</option>
-              <option>Existing online store</option>
+              <option>Up-and-coming brand (under $50k/mo)</option>
+              <option>Existing online store ($50k–$250k/mo)</option>
               <option>Brick-and-mortar retailer going online</option>
-              <option>Sponsorship / partnership</option>
+              <option>Sponsorship / creator partnership</option>
             </select>
           </div>
           <div class="field">
-            <label for="channels">Channels you're interested in</label>
+            <label for="channels">Primary bottleneck or focus</label>
             <select id="channels" name="channels">
-              <option>Not sure yet — advise me</option>
-              <option>Social media (Instagram, TikTok, X)</option>
-              <option>YouTube</option>
-              <option>Live streaming (Twitch, Kick, TikTok Live)</option>
-              <option>Whatnot live shopping</option>
-              <option>Amazon / eBay marketplaces</option>
+              <option>Not sure yet — audit my funnel first</option>
+              <option>Rising Meta / Google CAC — testing creator &amp; affiliate reach</option>
+              <option>Storefront conversion rate / margin review before scaling</option>
+              <option>Launching Whatnot / TikTok Live shopping</option>
+              <option>Expanding onto Amazon / eBay marketplaces</option>
             </select>
           </div>
           <div class="field">
             <label for="message">What are you trying to achieve?</label>
-            <textarea id="message" name="message" rows="4" placeholder="Goals, budget, timeline — anything helpful."></textarea>
+            <textarea id="message" name="message" rows="4" placeholder="Current monthly revenue, rough ad budget, margins, or timeline — anything helpful."></textarea>
           </div>
-          <button type="submit" class="cta-primary">Send Inquiry</button>
+          <button type="submit" id="contact-submit-btn" class="cta-primary">Send Inquiry</button>
+          <p class="form-status" id="contact-form-status" aria-live="polite"></p>
         </form>
 
         <aside class="contact-aside">
           <div class="aside-card">
-            <h2>Prefer email?</h2>
-            <p>Reach us directly and we'll respond within one business day.</p>
-            <a href="mailto:coolosdev26@proton.me" class="aside-link">coolosdev26@proton.me</a>
+            <h2>Book a 15-min call directly</h2>
+            <p>Want to talk through your bottlenecks live? Pick a discovery slot with zero obligation.</p>
+            <a href="#" data-open-modal="call" class="aside-link">Open Strategy Call Scheduler →</a>
           </div>
           <div class="aside-card">
             <h2>What happens next</h2>
             <ol class="next-list">
-              <li>We review your goals and current reach.</li>
-              <li>You get a recommended channel mix and package.</li>
-              <li>We scope budget, timeline, and dashboard access.</li>
+              <li>We review your store, margins, and current conversion bottlenecks.</li>
+              <li>You get an honest recommendation on the 1–2 channels worth testing first.</li>
+              <li>We scope budget, 60–90 day ramp expectations, and shared reporting.</li>
             </ol>
           </div>
           <div class="aside-card">
-            <h2>Follow our work</h2>
+            <h2>Connect with Partner Revenue Labs</h2>
             <div class="social-links">
-              <a href="https://x.com/coolosdev" target="_blank" rel="noopener" class="social-link">Twitter / X</a>
-              <a href="https://www.linkedin.com/in/coolosdev" target="_blank" rel="noopener" class="social-link">LinkedIn</a>
-              <a href="https://instagram.com/coolosdev" target="_blank" rel="noopener" class="social-link">Instagram</a>
+              <a href="https://x.com/partnerrevlabs" target="_blank" rel="noopener" class="social-link">X (Twitter)</a>
+              <a href="https://www.linkedin.com/company/partner-revenue-labs" target="_blank" rel="noopener" class="social-link">LinkedIn</a>
+              <a href="https://www.facebook.com/partnerrevenuelabs" target="_blank" rel="noopener" class="social-link">Facebook</a>
             </div>
           </div>
         </aside>
@@ -83,6 +83,59 @@ const canonical = "https://partner-revenue-labs.pages.dev/contact";
     </section>
   </div>
 </BaseLayout>
+
+<script>
+  (function () {
+    const form = document.getElementById('contact-inquiry-form') as HTMLFormElement | null;
+    if (!form) return;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('contact-submit-btn') as HTMLButtonElement | null;
+      const statusEl = document.getElementById('contact-form-status');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+      }
+
+      const name = (document.getElementById('name') as HTMLInputElement | null)?.value || '';
+      const email = (document.getElementById('email') as HTMLInputElement | null)?.value || '';
+      const brandUrl = (document.getElementById('brand') as HTMLInputElement | null)?.value || '';
+      const revenueTier = (document.getElementById('type') as HTMLSelectElement | null)?.value || '';
+      const channelFocus = (document.getElementById('channels') as HTMLSelectElement | null)?.value || '';
+      const notes = (document.getElementById('message') as HTMLTextAreaElement | null)?.value || '';
+
+      try {
+        const res = await fetch('/api/qual', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            email,
+            brandUrl,
+            revenueTier,
+            bottleneck: notes ? `${channelFocus} | Notes: ${notes}` : channelFocus,
+          }),
+        });
+        if (!res.ok) throw new Error('Submission failed');
+        if (btn) btn.textContent = 'Inquiry Sent ✓';
+        if (statusEl) {
+          statusEl.textContent = 'Received! We will review your brand and respond within one business day.';
+          statusEl.className = 'form-status form-status--ok';
+        }
+        form.reset();
+      } catch {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Send Inquiry';
+        }
+        if (statusEl) {
+          statusEl.textContent = 'Could not send right now — please try the Strategy Call scheduler on the right.';
+          statusEl.className = 'form-status form-status--err';
+        }
+      }
+    });
+  })();
+</script>
 
 <style>
   .container {
@@ -307,6 +360,22 @@ const canonical = "https://partner-revenue-labs.pages.dev/contact";
 
   .social-link:hover {
     color: var(--accent-hover);
+  }
+
+  .form-status {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    margin-top: 0.25rem;
+  }
+
+  .form-status--ok {
+    color: #2f5232;
+    font-weight: 600;
+  }
+
+  .form-status--err {
+    color: var(--brand-red);
+    font-weight: 600;
   }
 
   @media (max-width: 640px) {

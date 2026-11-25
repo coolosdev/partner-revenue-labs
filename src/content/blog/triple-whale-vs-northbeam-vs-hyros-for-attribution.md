@@ -241,7 +241,7 @@ A: Yes, but it will reset your historical data. Plan ahead before switching.
 5. **Scale** – add more channels, optimize based on insights
 
 **Need help?**
-- Contact coolosdev26@proton.me for a 1-hour strategy session
+- [Request a 48-hour growth & bottleneck audit](/contact)
 - Join the weekly newsletter for Shopify AI ads and analytics tips
 
 ---

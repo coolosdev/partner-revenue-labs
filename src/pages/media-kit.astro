@@ -52,91 +52,40 @@ const featured = sorted.find((p) => p.data.featured) ?? sorted[0];
 
       <div class="audience-grid">
         <div class="audience-card">
-          <h3>Audience & Reach</h3>
+          <h3>Agency Focus &amp; Standards</h3>
           <table class="meta-table">
-            <thead><tr><th>Metric</th><th>Current</th><th>Target (3-mo)</th></tr></thead>
+            <thead><tr><th>Area</th><th>Approach</th></tr></thead>
             <tbody>
-              <tr><td>Monthly unique visitors</td><td>~300</td><td>1,500</td></tr>
-              <tr><td>Pageviews / month</td><td>~600</td><td>3,000</td></tr>
-              <tr><td>Email subscribers</td><td>0 (in-flight MailerLite)</td><td>500</td></tr>
-              <tr><td>Social followers</td><td>LinkedIn 12, Instagram 8, X 5, YouTube 0</td><td>LinkedIn 500, IG 300, X 200, YT 50</td></tr>
-              <tr><td>Top traffic sources</td><td>Direct / Google organic (sitemap, robots)</td><td>Organic SEO, referral from affiliate networks, newsletter, partner CTAs</td></tr>
-              <tr><td>Geography</td><td>US 65%, EU 20%, APAC 15%</td><td>Same distribution, deeper US penetration</td></tr>
+              <tr><td>Initial Audit</td><td>48-hour funnel, margin &amp; tracking review</td></tr>
+              <tr><td>Launch Scope</td><td>1–2 focused channels before expanding</td></tr>
+              <tr><td>Ramp Window</td><td>60–90 day structured testing &amp; iteration</td></tr>
+              <tr><td>Reporting</td><td>Shared GA4 &amp; Looker Studio dashboards</td></tr>
+              <tr><td>Core Markets</td><td>US DTC brands, creators &amp; retail-to-online</td></tr>
             </tbody>
           </table>
         </div>
         <div class="audience-card">
-          <h3>How We Track</h3>
-          <p>Cloudflare Pages (free tier) → `dist/` static output → GitHub `main` pushes auto-deploy via `wrangler pages deployment create dist --project-name=partner-revenue-labs --branch=main`. Sitemap + robots.txt submitted to Google Search Console. GA not yet installed (cost-saving on free tier).</p>
+          <h3>Who We Work Best With</h3>
+          <p>Brands with 55%+ gross margins, reliable fulfillment, and realistic expectations around creative testing and attribution. We prefer diagnosing conversion bottlenecks before recommending increased ad spend.</p>
         </div>
       </div>
 
       <div class="content-strategy">
-        <h2>Content Strategy</h2>
+        <h2>Core Capabilities</h2>
         <ul>
-          <li><strong>Omnichannel walkthrough</strong>: detailed channel pages for social media, YouTube, live streaming, Whatnot live shopping, Amazon, and eBay — each with what we do and the customer-experience outcomes.</li>
-          <li><strong>Advertising packages</strong>: Launch ($1,500/mo), Scale ($3,500/mo), and Dominate (custom) with transparent scope and ad spend.</li>
-          <li><strong>Client dashboard</strong>: real-time preview of ad spend, ROAS, impressions, conversions, and channel performance — available with every package.</li>
-          <li><strong>Case studies &amp; insights</strong>: ongoing breakdowns of campaigns, channel results, and live-shopping activations at `/blog` (Insights).</li>
-          <li><strong>SEO</strong>: Per-page <code>&lt;title&gt;</code>, description, Open Graph &amp; Twitter cards, canonical URLs, Zod-validated front-matter, <code>astro:content</code> collection config.</li>
+          <li><strong>Channel execution</strong>: social media, YouTube creator integrations, live streaming, Whatnot live shopping, Amazon, and eBay marketplaces.</li>
+          <li><strong>Transparent packages</strong>: Launch ($1,500/mo), Scale ($3,500/mo), and Dominate (custom) with clear management scope separate from platform ad spend.</li>
+          <li><strong>Shared reporting</strong>: weekly reviews of spend, ROAS, conversion rate, and channel contribution.</li>
+          <li><strong>Insights &amp; playbooks</strong>: practical breakdowns of ad tooling, attribution stacks, and retention workflows at <a href="/blog">/blog</a>.</li>
         </ul>
-      </div>
-
-      <div class="tech-stack">
-        <h2>Technical Stack</h2>
-        <table class="meta-table">
-          <thead><tr><th>Layer</th><th>Service</th><th>Free-tier cost</th></tr></thead>
-          <tbody>
-            <tr><td>Frontend / Static</td><td>Cloudflare Pages (Vite/React)</td><td>$0/mo</td></tr>
-            <tr><td>Database</td><td>D1 (SQLite) – not yet provisioned</td><td>$0/mo</td></tr>
-            <tr><td>Hosting / CDN</td><td>Cloudflare CDN</td><td>$0/mo</td></tr>
-            <tr><td>AI Content</td><td>Workers AI (10k neurons/day)</td><td>$0/mo</td></tr>
-            <tr><td>Domain</td><td>Custom domain (Porkbun/Coolhost) – pending</td><td>~$10/yr</td></tr>
-            <tr><td>Version control / CI</td><td>GitHub (private repo, public site)</td><td>Free</td></tr>
-            <tr><td>Deploy tooling</td><td>`wrangler` v4.164.0, npm scripts (`dev`, `build`, `preview`)</td><td>Free</td></tr>
-            <tr><td>LLM scoring / proposals</td><td>OpenAI gpt‑4o‑mini (~$0.15/1M tokens)</td><td>~$1–10/mo</td></tr>
-            <tr><td>Long-term hosting options</td><td>Railway, Render, Fly.io, Vercel</td><td>$0–20/mo</td></tr>
-          </tbody>
-        </table>
-        <p class="key-diff">Key differentiator: Entire stack runs on Cloudflare free tier → $0 recurring cost, globally distributed edge network, instant deploys on every `git push`.</p>
-      </div>
-
-      <div class="partnerships">
-        <h2>Partnerships & Directory Presence</h2>
-        <ul>
-          <li><strong>Affiliate networks</strong>: Klaviyo, Triple Whale, Northbeam, Hyros, Google PMax, Meta Advantage+, Shopify App Store, Freshdesk, Gorgias.</li>
-          <li><strong>Directory listings</strong> (claimed/in-progress): impact.com agency directory, CJ Affiliate/Awin/Rakuten Advertising/ShareASale (publisher-side), Tech partners: Cloudflare Workers AI, Astro, Vite, GitHub Pages, Zapier (free), Make (free).</li>
-          <li><strong>Media assets</strong>: favicon.svg (180×180px SVG), robots.txt, sitemap-index.xml, OG image placeholder.</li>
-        </ul>
-      </div>
-
-      <div class="assets">
-        <h2>Assets</h2>
-        <table class="meta-table">
-          <thead><tr><th>Asset</th><th>Spec</th><th>Location</th></tr></thead>
-          <tbody>
-            <tr><td>Logo</td><td>SVG, 180×180 px (favicon.svg)</td><td>/public/favicon.svg</td></tr>
-            <tr><td>Website URL</td><td>https://partner-revenue-labs.pages.dev</td><td>Deployed on Cloudflare Pages</td></tr>
-            <tr><td>Tagline</td><td>"Actionable guides..."</td><td>Homepage & footer</td></tr>
-            <tr><td>Hero image</td><td>Gradient background (#f7f5f0 → #e2ddd3); social card after first 3 posts</td><td>src/pages/index.astro</td></tr>
-            <tr><td>OG image</td><td>To be designed in Canva/Figma once first posts publish</td><td>To be added</td></tr>
-            <tr><td>Social handles</td><td>LinkedIn /coolosdev · Instagram @coolosdev · X/Twitter @coolosdev · YouTube /coolosdev · Facebook /coolosdev · TikTok @coolosdev</td><td>Claimed / in-progress</td></tr>
-            <tr><td>Press-ready PDF</td><td>Generate via `pandoc MEDIA-KIT.md -o media-kit.pdf`</td><td>On demand</td></tr>
-            <tr><td>Public assets zip</td><td>favicon.svg, robots.txt, sitemap-index.xml</td><td>/public/</td></tr>
-          </tbody>
-        </table>
       </div>
 
       <div class="press-release">
-        <h2>Press Release (Draft)</h2>
+        <h2>Agency Overview</h2>
         <blockquote>
-          FOR IMMEDIATE RELEASE<br/><br/>
-          Partner Revenue Labs Launches as Full-Service Online Marketing Agency<br/>
-          [City, Date] – Partner Revenue Labs goes live today as a full-service online marketing agency helping up-and-coming brands, sponsorship partners, and brick-and-mortar retailers build real online reach across social media, YouTube, live streaming, and marketplaces.<br/>
-          The agency offers three advertising packages — Launch, Scale, and Dominate — plus a shared client dashboard that tracks ad spend, ROAS, and conversions across every channel in real time.
+          Partner Revenue Labs helps emerging DTC brands, sponsorship partners, and brick-and-mortar retailers build measurable online sales channels across creator partnerships, social media, live shopping, and marketplaces — grounded in realistic unit economics and transparent reporting.
         </blockquote>
-        <p>"Most brands don't have a reach problem — they have a focus problem," says Coolosdev. "We bring every channel into one strategy and prove it worked with a dashboard that shows exactly where every dollar went."</p>
-        <p>Media contacts:<br/>Coolosdev | coolosdev26@proton.me | https://github.com/coolosdev</p>
+        <p>Media &amp; partnership inquiries: <a href="/contact" class="social-link">Contact Partner Revenue Labs</a></p>
       </div>
     </section>
   </div>

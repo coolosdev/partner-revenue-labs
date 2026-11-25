@@ -272,7 +272,7 @@ A: 2-4 weeks to collect enough data for AI models to optimize. Start with small 
 5. **Optimize monthly** – review ROI metrics and adjust
 
 **Need help?**
-- Contact coolosdev26@proton.me for a 1-hour strategy session
+- [Request a 48-hour growth & bottleneck audit](/contact)
 - Join the weekly newsletter for Shopify AI ads and analytics tips
 
 ---
