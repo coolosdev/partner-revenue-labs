@@ -11,17 +11,19 @@
  * - Returns .ics data URI for instant 1-click addition to calendar.
  */
 
+import {
+  CORS_HEADERS,
+  cleanText,
+  escapeHtml,
+  isValidEmail,
+  preflightResponse,
+  saveLead,
+} from '../_lib/leads.js';
+
 const DEFAULT_TZ = 'America/Los_Angeles';
 
 export async function onRequestOptions() {
-  return new Response(null, {
-    status: 204,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
-  });
+  return preflightResponse();
 }
 
 function pad(n) {
@@ -139,11 +141,6 @@ function escapeIcsText(value) {
     .replace(/;/g, '\\;');
 }
 
-function escapeHtml(value) {
-  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-  return String(value || '').replace(/[&<>"']/g, (c) => map[c]);
-}
-
 function toBase64(str) {
   const bytes = new TextEncoder().encode(str);
   let binary = '';
@@ -154,23 +151,30 @@ function toBase64(str) {
 export async function onRequestPost(context) {
   const { request, env } = context;
 
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Content-Type': 'application/json',
-  };
-
   try {
     const data = await request.json();
-    const { name, email, dateStr, timeStr, topic, brandUrl } = data;
+    const name = cleanText(data.name, 150);
+    const email = cleanText(data.email, 200);
+    const dateStr = cleanText(data.dateStr, 80);
+    const timeStr = cleanText(data.timeStr, 40);
+    const topic = cleanText(data.topic, 150);
+    const brandUrl = cleanText(data.brandUrl, 300);
 
     if (!name || !email) {
       return new Response(
         JSON.stringify({ success: false, error: 'Name and email are required.' }),
-        { status: 400, headers: corsHeaders }
+        { status: 400, headers: CORS_HEADERS }
       );
     }
 
-    const timeZone = data.timezone || DEFAULT_TZ;
+    if (!isValidEmail(email)) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Please provide a valid email address.' }),
+        { status: 400, headers: CORS_HEADERS }
+      );
+    }
+
+    const timeZone = cleanText(data.timezone, 80) || DEFAULT_TZ;
     const resolved = resolveDate(dateStr, DEFAULT_TZ);
     const { hour, minute } = parseTime(timeStr);
 
@@ -246,10 +250,24 @@ export async function onRequestPost(context) {
     const icsBase64 = toBase64(icsContent);
     const icsDataUri = `data:text/calendar;charset=utf-8;base64,${icsBase64}`;
 
+    // Persist booking lead in Cloudflare D1 so submissions are never dropped
+    const dbResult = await saveLead(env, {
+      kind: 'booking',
+      name,
+      email,
+      brandUrl,
+      topic,
+      slotDate: dateStr || displayDate,
+      slotTime: timeStr || displayTime,
+      startUtc: startUtc.toISOString(),
+      timezone: timeZone,
+    });
+
     // Optional: Send email via Resend API if RESEND_API_KEY is configured
+    let emailSent = false;
     if (env.RESEND_API_KEY) {
       try {
-        await fetch('https://api.resend.com/emails', {
+        const emailRes = await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${env.RESEND_API_KEY}`,
@@ -280,19 +298,22 @@ export async function onRequestPost(context) {
             ],
           }),
         });
+        emailSent = emailRes.ok;
       } catch (emailErr) {
         console.error('Email dispatch error (non-fatal):', emailErr);
       }
     }
 
     // Optional: Dispatch Webhook to Slack / Discord / Zapier if WEBHOOK_URL is set
+    let webhookSent = false;
     if (env.WEBHOOK_URL) {
       try {
-        await fetch(env.WEBHOOK_URL, {
+        const whRes = await fetch(env.WEBHOOK_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             event: 'new_booking',
+            leadId: dbResult.id,
             name,
             email,
             brandUrl,
@@ -303,9 +324,17 @@ export async function onRequestPost(context) {
             timestamp: now.toISOString(),
           }),
         });
+        webhookSent = whRes.ok;
       } catch (webhookErr) {
         console.error('Webhook notification error:', webhookErr);
       }
+    }
+
+    if (!dbResult.saved && !emailSent && !webhookSent) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Unable to persist booking right now.' }),
+        { status: 500, headers: CORS_HEADERS }
+      );
     }
 
     const gcalUrl =
@@ -319,6 +348,8 @@ export async function onRequestPost(context) {
       JSON.stringify({
         success: true,
         message: 'Booking confirmed successfully',
+        leadId: dbResult.id,
+        savedToDb: dbResult.saved,
         booking: {
           name,
           email,
@@ -331,12 +362,12 @@ export async function onRequestPost(context) {
           icsDataUri,
         },
       }),
-      { status: 200, headers: corsHeaders }
+      { status: 200, headers: CORS_HEADERS }
     );
   } catch (err) {
     return new Response(
       JSON.stringify({ success: false, error: err.message || 'Internal server error' }),
-      { status: 500, headers: corsHeaders }
+      { status: 500, headers: CORS_HEADERS }
     );
   }
 }

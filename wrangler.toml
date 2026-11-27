@@ -1,3 +1,9 @@
 name = "partner-revenue-labs"
 pages_build_output_dir = "./dist"
 compatibility_date = "2025-11-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "partner-revenue-labs-leads"
+database_id = "e435a337-a98c-42c4-8f0b-eef9729ae546"
+migrations_dir = "migrations"

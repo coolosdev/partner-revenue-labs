@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "deploy": "astro build && wrangler pages deploy dist --project-name partner-revenue-labs --branch main"
+    "deploy": "astro build && wrangler pages deploy dist --project-name partner-revenue-labs --branch main",
+    "leads": "wrangler d1 execute partner-revenue-labs-leads --remote --command \"SELECT id, kind, name, email, brand_url, revenue_tier, bottleneck, topic, slot_date, slot_time, status, created_at FROM leads ORDER BY id DESC LIMIT 50;\""
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",
