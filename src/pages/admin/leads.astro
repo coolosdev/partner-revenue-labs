@@ -1,0 +1,253 @@
+---
+// /admin/leads — Client-side lead viewer. Auth via LEADS_TOKEN query param.
+// No server-side secrets here; token is entered by the admin in-browser.
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRL · Lead Database</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <style>
+    :root {
+      --sage: #6b8f71;
+      --charcoal: #2c2c2c;
+      --cream: #f9f6f1;
+      --red: #c0392b;
+      --muted: #888;
+      --border: #ddd;
+      --radius: 6px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--cream); color: var(--charcoal); min-height: 100vh; }
+    header { background: var(--charcoal); color: #fff; padding: 1rem 2rem; display: flex; align-items: center; gap: 1rem; }
+    header h1 { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.05em; }
+    header span { font-size: 0.75rem; color: var(--sage); background: rgba(107,143,113,0.15); padding: 2px 8px; border-radius: 999px; border: 1px solid var(--sage); }
+    main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    /* Auth gate */
+    #auth-gate { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 1rem; }
+    #auth-gate h2 { font-size: 1.3rem; }
+    #auth-gate input { padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: var(--radius); font-size: 1rem; width: 320px; }
+    #auth-gate button { padding: 0.6rem 1.5rem; background: var(--sage); color: #fff; border: none; border-radius: var(--radius); font-size: 1rem; cursor: pointer; font-weight: 600; }
+    #auth-gate button:hover { opacity: 0.85; }
+    #auth-error { color: var(--red); font-size: 0.9rem; display: none; }
+
+    /* Controls */
+    #controls { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    #controls select, #controls input[type=number] { padding: 0.4rem 0.75rem; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.9rem; }
+    #controls button { padding: 0.4rem 1rem; background: var(--charcoal); color: #fff; border: none; border-radius: var(--radius); cursor: pointer; font-size: 0.9rem; }
+    #controls button:hover { opacity: 0.8; }
+    #stats { margin-left: auto; font-size: 0.85rem; color: var(--muted); }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    thead th { background: var(--charcoal); color: #fff; padding: 0.6rem 0.75rem; text-align: left; white-space: nowrap; font-weight: 600; }
+    tbody tr:nth-child(even) { background: #f5f3ef; }
+    tbody td { padding: 0.55rem 0.75rem; vertical-align: top; border-bottom: 1px solid var(--border); max-width: 220px; word-break: break-word; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; }
+    .badge-audit { background: #fff3cd; color: #856404; }
+    .badge-booking { background: #d1e7dd; color: #0f5132; }
+
+    /* Pagination */
+    #pagination { display: flex; align-items: center; gap: 0.75rem; margin-top: 1.25rem; justify-content: flex-end; }
+    #pagination button { padding: 0.35rem 0.9rem; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; cursor: pointer; font-size: 0.85rem; }
+    #pagination button:disabled { opacity: 0.4; cursor: default; }
+    #pagination span { font-size: 0.85rem; color: var(--muted); }
+
+    /* Loading / empty */
+    #status-msg { text-align: center; padding: 3rem; color: var(--muted); }
+    #data-view { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Partner Revenue Labs</h1>
+    <span>Lead Database</span>
+  </header>
+  <main>
+    <!-- Auth Gate -->
+    <div id="auth-gate">
+      <h2>🔐 Admin Access</h2>
+      <p style="color:var(--muted);font-size:0.9rem;">Enter your LEADS_TOKEN to view the database.</p>
+      <input type="password" id="token-input" placeholder="Enter admin token" autocomplete="current-password" />
+      <button onclick="tryAuth()">Unlock</button>
+      <p id="auth-error">Invalid token or connection error. Try again.</p>
+    </div>
+
+    <!-- Data View -->
+    <div id="data-view">
+      <div id="controls">
+        <label>
+          Filter:
+          <select id="kind-filter" onchange="reload()">
+            <option value="">All leads</option>
+            <option value="audit">Audit</option>
+            <option value="booking">Booking</option>
+          </select>
+        </label>
+        <label>
+          Per page:
+          <input type="number" id="limit-input" value="50" min="10" max="500" style="width:70px" onchange="reload()" />
+        </label>
+        <button onclick="reload()">↺ Refresh</button>
+        <button onclick="exportCsv()" style="background:var(--sage)">⬇ Export CSV</button>
+        <span id="stats"></span>
+      </div>
+
+      <div class="table-wrap">
+        <div id="status-msg">Loading…</div>
+        <table id="leads-table" style="display:none">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Kind</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Brand URL</th>
+              <th>Revenue Tier</th>
+              <th>Bottleneck / Topic</th>
+              <th>Slot</th>
+              <th>Status</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody id="leads-body"></tbody>
+        </table>
+      </div>
+
+      <div id="pagination">
+        <button id="btn-prev" onclick="prevPage()" disabled>‹ Prev</button>
+        <span id="page-info"></span>
+        <button id="btn-next" onclick="nextPage()">Next ›</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // @ts-nocheck — intentional browser-runtime JS, not module TS
+    let TOKEN = '';
+    let currentOffset = 0;
+    let currentTotal = 0;
+    let currentLimit = 50;
+    let currentData = [];
+
+    async function tryAuth() {
+      TOKEN = document.getElementById('token-input').value.trim();
+      if (!TOKEN) return;
+      const ok = await fetchLeads(0, 1, '');
+      if (ok) {
+        document.getElementById('auth-gate').style.display = 'none';
+        document.getElementById('data-view').style.display = 'block';
+        currentOffset = 0;
+        reload();
+      } else {
+        document.getElementById('auth-error').style.display = 'block';
+      }
+    }
+
+    document.getElementById('token-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') tryAuth();
+    });
+
+    async function fetchLeads(offset, limit, kind) {
+      const params = new URLSearchParams({ token: TOKEN, limit, offset });
+      if (kind) params.set('kind', kind);
+      try {
+        const res = await fetch('/api/leads?' + params.toString());
+        if (res.status === 401) return false;
+        if (!res.ok) return false;
+        return await res.json();
+      } catch { return false; }
+    }
+
+    async function reload() {
+      currentOffset = 0;
+      await loadPage();
+    }
+
+    async function loadPage() {
+      const kind = document.getElementById('kind-filter').value;
+      currentLimit = parseInt(document.getElementById('limit-input').value, 10) || 50;
+      document.getElementById('status-msg').style.display = 'block';
+      document.getElementById('status-msg').textContent = 'Loading…';
+      document.getElementById('leads-table').style.display = 'none';
+
+      const data = await fetchLeads(currentOffset, currentLimit, kind);
+      if (!data) {
+        document.getElementById('status-msg').textContent = 'Failed to load leads.';
+        return;
+      }
+
+      currentTotal = data.total;
+      currentData = data.leads;
+      renderTable(data.leads);
+      renderPagination();
+      document.getElementById('stats').textContent = `${data.total} total lead${data.total !== 1 ? 's' : ''}`;
+    }
+
+    function renderTable(leads) {
+      const tbody = document.getElementById('leads-body');
+      tbody.innerHTML = '';
+      if (!leads.length) {
+        document.getElementById('status-msg').textContent = 'No leads found.';
+        document.getElementById('leads-table').style.display = 'none';
+        return;
+      }
+      document.getElementById('status-msg').style.display = 'none';
+      document.getElementById('leads-table').style.display = 'table';
+
+      leads.forEach((l, i) => {
+        const slot = [l.slot_date, l.slot_time].filter(Boolean).join(' ');
+        const topic = l.bottleneck || l.topic || '—';
+        const created = l.created_at ? new Date(l.created_at).toLocaleString() : '—';
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${currentOffset + i + 1}</td>
+          <td><span class="badge badge-${l.kind || ''}">${l.kind || '—'}</span></td>
+          <td>${esc(l.name)}</td>
+          <td><a href="mailto:${esc(l.email)}">${esc(l.email)}</a></td>
+          <td>${l.brand_url ? `<a href="${esc(l.brand_url)}" target="_blank" rel="noopener">${esc(l.brand_url)}</a>` : '—'}</td>
+          <td>${esc(l.revenue_tier) || '—'}</td>
+          <td style="max-width:200px">${esc(topic).slice(0, 150)}${topic.length > 150 ? '…' : ''}</td>
+          <td>${esc(slot) || '—'}</td>
+          <td>${esc(l.status) || 'new'}</td>
+          <td style="white-space:nowrap">${created}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function renderPagination() {
+      const pages = Math.ceil(currentTotal / currentLimit) || 1;
+      const page = Math.floor(currentOffset / currentLimit) + 1;
+      document.getElementById('page-info').textContent = `Page ${page} of ${pages}`;
+      document.getElementById('btn-prev').disabled = currentOffset === 0;
+      document.getElementById('btn-next').disabled = currentOffset + currentLimit >= currentTotal;
+    }
+
+    function prevPage() { currentOffset = Math.max(0, currentOffset - currentLimit); loadPage(); }
+    function nextPage() { currentOffset += currentLimit; loadPage(); }
+
+    function exportCsv() {
+      if (!currentData.length) return;
+      const cols = ['id','kind','name','email','brand_url','revenue_tier','bottleneck','topic','slot_date','slot_time','status','created_at'];
+      const rows = [cols.join(',')];
+      currentData.forEach(l => {
+        rows.push(cols.map(c => `"${String(l[c] || '').replace(/"/g,'""')}"`).join(','));
+      });
+      const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `prl-leads-${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+    }
+
+    function esc(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+  </script>
+</body>
+</html>
