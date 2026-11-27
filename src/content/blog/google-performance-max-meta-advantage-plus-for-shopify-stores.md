@@ -205,7 +205,7 @@ A: Yes. They complement each other, but you need to track each separately (Googl
 5. Draft your first MA+ campaign brief: audience interests, creative themes, objective
 
 **Need help?**
-- Follow the setup guide at `/blog/hello-world` (already published)
+- Follow the pre-spend checklist at [the 48-Hour Audit Playbook](/blog/48-hour-funnel-margin-audit-playbook)
 - [Request a 48-hour growth & bottleneck audit](/contact)
 
 **Resources & Templates**

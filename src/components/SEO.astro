@@ -9,9 +9,9 @@ interface Props {
 
 const {
   title = "Partner Revenue Labs",
-  description = "Actionable guides and tools for ecommerce brands using AI in ads and analytics.",
+  description = "Unit-economics-first performance media, creator partnerships, and attribution architecture for DTC brands and omnichannel retailers.",
   canonical,
-  ogImage,
+  ogImage = "https://partner-revenue-labs.pages.dev/og-image.png",
   schema,
 } = Astro.props as Props;
 
@@ -35,12 +35,14 @@ const meta = {
 <title>{meta.title}</title>
 <link rel="canonical" href={meta.canonical} />
 <meta name="description" content={meta.description} />
+<meta property="og:type" content="website" />
 <meta property="og:title" content={meta.openGraph?.title} />
 <meta property="og:description" content={meta.openGraph?.description} />
 {ogImage && <meta property="og:image" content={ogImage} />}
 <meta name="twitter:card" content={meta.twitter.card} />
 <meta name="twitter:title" content={meta.twitter.title} />
 <meta name="twitter:description" content={meta.twitter.description} />
+{ogImage && <meta name="twitter:image" content={ogImage} />}
 
 {Array.isArray(schema) ? (
   schema.map((s) => (
