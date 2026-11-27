@@ -1,0 +1,128 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Terms of Service — Partner Revenue Labs";
+const description = "Terms governing use of the Partner Revenue Labs website, planning models, diagnostic audits, and retainer engagements.";
+const canonical = "https://partner-revenue-labs.pages.dev/terms";
+---
+
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <div class="container">
+    <section class="legal-section">
+      <span class="hero-eyebrow">TERMS &amp; DISCLOSURES</span>
+      <h1>Terms of Service</h1>
+      <p class="legal-meta">Effective Date: November 26, 2026 · Partner Revenue Labs</p>
+
+      <div class="legal-card">
+        <h2>1. Acceptance of Terms</h2>
+        <p>By accessing <code>partner-revenue-labs.pages.dev</code> or submitting an audit or booking request, you agree to these Terms of Service. Paid client engagements are governed separately by a signed Master Services Agreement (MSA) and Statement of Work (SOW).</p>
+      </div>
+
+      <div class="legal-card">
+        <h2>2. Illustrative Models &amp; No Revenue Guarantees</h2>
+        <p>The MER &amp; Incrementality Planning Model, sample telemetry cockpit, and case breakdowns displayed on this website are <strong>illustrative planning tools only</strong>. They do not represent a promise, projection, or guarantee of ROAS, MER, CAC, or revenue outcomes.</p>
+        <p>Actual marketing performance depends on factors outside agency control, including product-market fit, landed gross margins, inventory availability, storefront conversion rate, seasonality, and platform auction dynamics.</p>
+      </div>
+
+      <div class="legal-card">
+        <h2>3. Free 48-Hour Diagnostic Audits</h2>
+        <p>Submitting a 48-hour audit request does not create an agency-client relationship, exclusivity, or confidentiality obligation beyond reasonable care of your submitted URL and contact information unless a separate mutual NDA is executed.</p>
+      </div>
+
+      <div class="legal-card">
+        <h2>4. Retainer Scope &amp; Platform Ad Spend</h2>
+        <p>Agency management retainers cover strategy, channel setup, creative testing coordination, and reporting as scoped in a signed SOW. Working media budgets (Meta, Google, Amazon, TikTok, creator fees, or affiliate commissions) are paid directly by the client to the respective platforms or partners unless explicitly stated otherwise.</p>
+      </div>
+
+      <div class="legal-card">
+        <h2>5. Intellectual Property &amp; Acceptable Use</h2>
+        <p>All site copy, code, visual assets, and playbooks belong to Partner Revenue Labs or its licensors. You agree not to scrape, abuse, or submit automated spam to our booking or audit endpoints.</p>
+      </div>
+
+      <div class="legal-card">
+        <h2>6. Contact</h2>
+        <p>Questions regarding these terms or an active statement of work can be submitted via our <a href="/contact">Contact page</a>.</p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .legal-section {
+    padding: 4rem 0 2rem;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--accent-strong);
+    margin-bottom: 0.85rem;
+  }
+
+  .legal-section h1 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-meta {
+    font-size: 0.875rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+
+  .legal-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .legal-card h2 {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+
+  .legal-card p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .legal-card p + p {
+    margin-top: 0.75rem;
+  }
+
+  .legal-card a {
+    color: var(--accent-strong);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .legal-card code {
+    background: var(--surface-elev);
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.25rem;
+    font-size: 0.85em;
+  }
+
+  @media (max-width: 640px) {
+    .legal-section h1 { font-size: 2rem; }
+    .legal-card { padding: 1.35rem; }
+  }
+</style>
